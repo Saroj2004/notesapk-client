@@ -1,0 +1,181 @@
+
+* { box-sizing: border-box; }
+
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Page wrapper */
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: #fff8e1; 
+}
+
+/* Card container */
+.container {
+  display: flex;
+  width: 100%;
+  max-width: 980px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  overflow: hidden;
+
+}
+
+
+.container > * {
+  min-width: 0;
+}
+
+/* Left (form) panel */
+.left-panel {
+  flex: 1 1 50%;
+  padding: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  background: #fff;
+}
+
+/* Right (image) panel */
+.right-panel {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: #fff3cd;
+}
+
+/* Branding + text */
+.logo {
+  color: #ffb300;
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.left-panel p {
+  margin: 6px 0 16px;
+  color: #555;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  font-size: 1rem;
+  outline: none;
+}
+
+input:focus {
+  border-color: #ffb300;
+  box-shadow: 0 0 0 4px rgba(255,179,0,0.08);
+}
+
+/* Button */
+.submit-btn {
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #ffb300;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Footer text */
+.footer-text {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.sign-in {
+  color: #ff9800;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+/* Image */
+.team-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+/* Tablet / medium screens: stack vertically */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left-panel {
+    padding: 28px;
+    order: 1; /* form first */
+  }
+
+  .right-panel {
+    padding: 20px;
+    order: 2; /* image below */
+  }
+
+  .team-img {
+    max-width: 360px;
+  }
+}
+
+/* Small phones: reduce padding, hide image to avoid crowding */
+@media (max-width: 480px) {
+  .left-panel {
+    padding: 18px;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .submit-btn {
+    padding: 10px;
+  }
+
+
+  .right-panel {
+    display: none;
+  }
+}
