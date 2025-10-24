@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../api" // updated
-import "./Signup.css";
+import { API_URL } from "../api";
+import "./Signup.css"; // shared styles with Signup
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,27 +12,28 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Login clicked", email, password);
 
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-        credentials: "include",
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setSuccess(data.msg || "Login successful!");
+        setSuccess(data.msg);
         setError("");
         localStorage.setItem("user", JSON.stringify(data.user));
-        setTimeout(() => navigate("/dashboard"), 2000);
+        setTimeout(() => navigate('../Dashboard.jsx'), 500);
       } else {
-        setError(data.msg || data.error || "Login failed");
+        setError(data.msg || data.error);
         setSuccess("");
       }
     } catch (err) {
+      console.error(err);
       setError("Server error, try again later");
       setSuccess("");
     }
@@ -51,6 +52,7 @@ const Login = () => {
             <input
               type="email"
               id="email"
+              autoComplete="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -61,20 +63,26 @@ const Login = () => {
             <input
               type="password"
               id="password"
+              autoComplete="current-password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
 
-            <button type="submit" className="submit-btn">Login</button>
+            <button type="submit" className="submit-btn">
+              Login
+            </button>
           </form>
 
           {error && <p className="error-msg">{error}</p>}
           {success && <p className="success-msg">{success}</p>}
 
           <p className="footer-text">
-            Don't have account? <Link to="/signup"><span className="sign-in"> Signup</span></Link>
+            Don't have an account?{" "}
+            <Link to="/signup">
+              <span className="sign-in">Signup</span>
+            </Link>
           </p>
         </div>
 

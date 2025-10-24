@@ -1,2 +1,2 @@
-// Centralized API URL
-export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
+// src/api.js
+export const API_URL = "https://notesapk-server-1.onrender.com/api";

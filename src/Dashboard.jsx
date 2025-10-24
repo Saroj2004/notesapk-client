@@ -23,8 +23,7 @@ const Dashboard = () => {
     try {
       const res = await fetch(`${API_URL}/notes?userId=${userId}`);
       const data = await res.json();
-      const notesWithFav = data.map((n) => ({ ...n, favorite: n.favorite || false }));
-      setNotes(notesWithFav);
+      setNotes(data.map(n => ({ ...n, favorite: n.favorite || false })));
     } catch (err) {
       console.error(err);
     }
@@ -37,7 +36,6 @@ const Dashboard = () => {
 
   const handleSaveNote = async () => {
     if (!currentNote.title || !currentNote.content) return alert("Fill all fields");
-
     const url = modalType === "add" ? `${API_URL}/notes` : `${API_URL}/notes/${currentNote._id}`;
     const method = modalType === "add" ? "POST" : "PUT";
 
@@ -47,15 +45,12 @@ const Dashboard = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(modalType === "add" ? { ...currentNote, user: user.id } : currentNote),
       });
-
       const data = await res.json();
-
       if (modalType === "add") {
-        setNotes([{ ...data, favorite: false }, ...notes]);
+        setNotes([ { ...data, favorite: false }, ...notes ]);
       } else {
-        setNotes(notes.map((note) => (note._id === data._id ? { ...data, favorite: note.favorite } : note)));
+        setNotes(notes.map(n => n._id === data._id ? { ...data, favorite: n.favorite } : n));
       }
-
       setShowModal(false);
       setCurrentNote({ _id: "", title: "", content: "" });
     } catch (err) {
@@ -64,21 +59,20 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this note?")) return;
-
+    if (!window.confirm("Are you sure?")) return;
     try {
       await fetch(`${API_URL}/notes/${id}`, { method: "DELETE" });
-      setNotes(notes.filter((note) => note._id !== id));
+      setNotes(notes.filter(n => n._id !== id));
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleFavorite = (id) => {
-    setNotes(notes.map((note) => (note._id === id ? { ...note, favorite: !note.favorite } : note)));
+    setNotes(notes.map(n => n._id === id ? { ...n, favorite: !n.favorite } : n));
   };
 
-  const filteredNotes = filter === "favorites" ? notes.filter((n) => n.favorite) : notes;
+  const filteredNotes = filter === "favorites" ? notes.filter(n => n.favorite) : notes;
 
   return (
     <div className="dashboard-wrapper">
@@ -92,23 +86,29 @@ const Dashboard = () => {
       </aside>
 
       <main className="main-content1">
-        <header><h1>Welcome, {user.name}!</h1></header>
+        <header>
+          <h1>Welcome, {user.name}!</h1>
+        </header>
 
         <section className="notes-section">
-          {filteredNotes.length === 0 ? <p>No notes yet</p> : filteredNotes.map((note) => (
+          {filteredNotes.length === 0 ? <p>No notes yet</p> : filteredNotes.map(note => (
             <div key={note._id} className="note-card">
               <h3>{note.title}</h3>
               <p>{note.content}</p>
               <div className="note-actions">
                 <button onClick={() => { setModalType("edit"); setCurrentNote(note); setShowModal(true); }}>Edit</button>
                 <button onClick={() => handleDelete(note._id)}>Delete</button>
-                <button className="fav" onClick={() => handleFavorite(note._id)}>{note.favorite ? "★" : "☆"}</button>
+                <button className="fav" onClick={() => handleFavorite(note._id)}>
+                  {note.favorite ? "★" : "☆"}
+                </button>
               </div>
             </div>
           ))}
         </section>
 
-        <button className="add-note-btn" onClick={() => { setModalType("add"); setCurrentNote({ title: "", content: "" }); setShowModal(true); }}>+ Add Note</button>
+        <button className="add-note-btn" onClick={() => { setModalType("add"); setCurrentNote({ title: "", content: "" }); setShowModal(true); }}>
+          + Add Note
+        </button>
 
         {showModal && (
           <div className="modal">
@@ -125,8 +125,8 @@ const Dashboard = () => {
                 value={currentNote.content}
                 onChange={(e) => setCurrentNote({ ...currentNote, content: e.target.value })}
               />
-              <button style={{cursor:"pointer"}} onClick={handleSaveNote}>Save</button>
-              <button style={{cursor:"pointer"}} onClick={() => setShowModal(false)}>Cancel</button>
+              <button style={{ cursor: "pointer" }} onClick={handleSaveNote}>Save</button>
+              <button style={{ cursor: "pointer" }} onClick={() => setShowModal(false)}>Cancel</button>
             </div>
           </div>
         )}

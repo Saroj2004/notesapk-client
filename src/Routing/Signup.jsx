@@ -13,6 +13,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Signup clicked", name, email, password);
 
     try {
       const res = await fetch(`${API_URL}/auth/signup`, {
@@ -24,14 +25,15 @@ const Signup = () => {
       const data = await res.json();
 
       if (res.ok) {
-        setSuccess(data.msg || "Signup successful!");
+        setSuccess(data.msg);
         setError("");
-        setTimeout(() => navigate("/login"), 1000);
+        setTimeout(() => navigate("/login"), 500);
       } else {
-        setError(data.msg || data.error || "Signup failed");
+        setError(data.msg || data.error);
         setSuccess("");
       }
     } catch (err) {
+      console.error(err);
       setError("Server error, try again later");
       setSuccess("");
     }
@@ -50,6 +52,7 @@ const Signup = () => {
             <input
               type="text"
               id="name"
+              autoComplete="name"
               placeholder="Enter your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -60,6 +63,7 @@ const Signup = () => {
             <input
               type="email"
               id="email"
+              autoComplete="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -70,20 +74,26 @@ const Signup = () => {
             <input
               type="password"
               id="password"
+              autoComplete="new-password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
 
-            <button type="submit" className="submit-btn">Submit</button>
+            <button type="submit" className="submit-btn">
+              Submit
+            </button>
           </form>
 
           {error && <p className="error-msg">{error}</p>}
           {success && <p className="success-msg">{success}</p>}
 
           <p className="footer-text">
-            Have an account? <Link to="/login"><span className="sign-in">Login</span></Link>
+            Already have an account?{" "}
+            <Link to="/login">
+              <span className="sign-in">Login</span>
+            </Link>
           </p>
         </div>
 
