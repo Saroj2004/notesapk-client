@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../api" // updated
 import "./Signup.css";
 
 const Login = () => {
-  const navigate = useNavigate(); // redirect after login
-
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,23 +14,22 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "include",
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setSuccess(data.msg);
+        setSuccess(data.msg || "Login successful!");
         setError("");
-        // Store user info in localStorage/sessionStorage (for demo)
         localStorage.setItem("user", JSON.stringify(data.user));
-        // Redirect to a dashboard or home page
         setTimeout(() => navigate("/dashboard"), 2000);
       } else {
-        setError(data.msg || data.error);
+        setError(data.msg || data.error || "Login failed");
         setSuccess("");
       }
     } catch (err) {

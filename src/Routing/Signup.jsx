@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../api";
 import "./Signup.css";
 
 const Signup = () => {
-  const navigate = useNavigate(); // to redirect after signup
-
-  // Form state
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,10 +12,10 @@ const Signup = () => {
   const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // prevent page reload
+    e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const res = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -25,12 +24,11 @@ const Signup = () => {
       const data = await res.json();
 
       if (res.ok) {
-        setSuccess(data.msg);
+        setSuccess(data.msg || "Signup successful!");
         setError("");
-        // Optional: redirect to login page after 1s
         setTimeout(() => navigate("/login"), 1000);
       } else {
-        setError(data.msg || data.error);
+        setError(data.msg || data.error || "Signup failed");
         setSuccess("");
       }
     } catch (err) {
@@ -45,7 +43,7 @@ const Signup = () => {
         <div className="left-panel">
           <div className="logo">Noteflow</div>
           <h2>Create an account</h2>
-          <p>create your first note today</p>
+          <p>Create your first note today</p>
 
           <form onSubmit={handleSubmit}>
             <label htmlFor="name">Full name</label>
@@ -78,9 +76,7 @@ const Signup = () => {
               required
             />
 
-            <button type="submit" className="submit-btn">
-              Submit
-            </button>
+            <button type="submit" className="submit-btn">Submit</button>
           </form>
 
           {error && <p className="error-msg">{error}</p>}
@@ -100,4 +96,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
