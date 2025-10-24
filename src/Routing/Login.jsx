@@ -1,7 +1,8 @@
+// src/Routing/Login.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../api";
-import "./Signup.css"; // shared styles with Signup
+import { API_URL } from "../api"; // make sure api.js is inside src/
+import "./Signup.css"; // shared styles
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login clicked", email, password);
+    console.log("Login clicked:", email, password);
 
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
@@ -27,13 +28,14 @@ const Login = () => {
         setSuccess(data.msg);
         setError("");
         localStorage.setItem("user", JSON.stringify(data.user));
-        setTimeout(() => navigate('../Dashboard.jsx'), 500);
+        // navigate to Dashboard after short delay
+        setTimeout(() => navigate("/dashboard"), 500);
       } else {
         setError(data.msg || data.error);
         setSuccess("");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
       setError("Server error, try again later");
       setSuccess("");
     }
@@ -70,19 +72,14 @@ const Login = () => {
               required
             />
 
-            <button type="submit" className="submit-btn">
-              Login
-            </button>
+            <button type="submit" className="submit-btn">Login</button>
           </form>
 
           {error && <p className="error-msg">{error}</p>}
           {success && <p className="success-msg">{success}</p>}
 
           <p className="footer-text">
-            Don't have an account?{" "}
-            <Link to="/signup">
-              <span className="sign-in">Signup</span>
-            </Link>
+            Don't have an account? <Link to="/signup"><span className="sign-in">Signup</span></Link>
           </p>
         </div>
 
